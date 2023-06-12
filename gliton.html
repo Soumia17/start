@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+    body{
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+    }
+    #my-canvas { border: 1px solid gray; }
+    
+  </style>
+</head>
+<body>
+    <!-- <div>
+        <label for="">nomber de vill</label>
+        <input type="number" name="" id="">
+    </div> -->
+  <canvas id="my-canvas" width="500" height="500"></canvas>
+  <script>
+
+    function drawPoint(context, x, y, label, color, size) {
+      	if (color == null) {
+        	color = '#000';
+        }
+        if (size == null) {
+            size = 5;
+        }
+      
+      	var radius = 0.5 * size;
+
+      	// to increase smoothing for numbers with decimal part
+		    var pointX = Math.round(x - radius);
+        var pointY = Math.round(y - radius);
+  
+        context.beginPath();
+        context.fillStyle = color;
+      	context.fillRect(pointX, pointY, size, size);
+        context.fill();
+      
+      	if (label) {
+            var textX = Math.round(x);
+          	var textY = Math.round(pointY - 5);
+          
+            context.font = 'Italic 14px Arial';
+            context.fillStyle = color;
+            context.textAlign = 'center';
+            context.fillText(label, textX, textY);
+        }
+    }
+     function dectance(x1,x2,y1,y2){
+      
+      return Math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2))
+     }
+    
+    // Usage example:
+
+    var canvas = document.querySelector('#my-canvas');
+    var context = canvas.getContext('2d');
+    // var min=50
+    // var max=500
+    var x=[50,80,140,200,140,400]
+    var y=[400,120,70,200,300,100]
+    let p
+    let coint=0
+    let max
+    let L=0
+    legth=x.length
+    //min distace
+    while(coint!=legth){
+        max=Math.hypot(x[0]-x[1], y[0]-y[1])
+         max2=dectance(x[0],x[1],y[0],y[1])
+        console.log('MAX='+max)
+        // L=x.length
+        // console.log('x.length='+L)
+        
+        for(let i=1;i<x.length;i++){
+            
+            console.log('disctance '+Math.hypot(x[0]-x[i], y[0]-y[i]))
+        if(max>Math.hypot(x[0]-x[i], y[0]-y[i])){
+             max= Math.hypot(x[0]-x[i], y[0]-y[i])
+             console.log('choix= '+max)
+            L++
+             p=i
+             console.log('P= '+p)}
+
+    }
+    if(L==0)
+    p=1
+
+    // Set line style
+    const ctx = canvas.getContext("2d");
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "blue";
+
+// Draw line from start to end point
+ctx.beginPath();
+ctx.moveTo(x[0], y[0]);
+ctx.lineTo(x[p], y[p]);
+ctx.stroke();
+drawPoint(context, 50, 400, 'Start', 'red', 7);
+    drawPoint(context, 80, 120, 'B', 'blue', 7);
+    drawPoint(context, 140, 70, 'C', 'blue', 7);
+    drawPoint(context, 200, 200, 'D', 'blue', 7);
+    drawPoint(context, 140, 300, 'F', 'blue', 7);
+    drawPoint(context, 400, 100, 'E', 'blue', 7);
+// x.shift();
+// y.shift();
+//remove the first element from the vecteur
+if(coint<legth-2){
+const index = p;
+if (index > -1) {
+  x.splice(0, 0, x.splice(index, 1)[0]);
+}
+const indeY = p;
+if (index > -1) {
+  y.splice(0, 0, y.splice(index, 1)[0]);
+}
+
+//change order of value,the min distance be come in the first index
+x.splice(1, 1);
+y.splice(1, 1);
+console.log(x)
+console.log(y)}
+// console.log('HI'+x)
+coint++
+L=0
+    }
+    const ctx = canvas.getContext("2d");
+ctx.lineWidth = 2;
+ctx.strokeStyle = "blue";
+    ctx.beginPath();
+ctx.moveTo(x[p], y[p]);
+ctx.lineTo(50,400);
+ctx.stroke();
+    
+    function randomNum(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min; // You can remove the Math.floor if you don't want it to be an integer
+}
+
+   
+    // drawPoint(context, 400, 200, 'E', 'blue', 7);
+  function proba(SolutionC,T,v){
+    return randomNum(0, 1)<Math.exp(Math.abs(v-SolutionC)/T)
+}
+function RC(S0,SolutionC,Tf,Ti,Alfa,NbVoisin){
+  let size=SolutionC.legth
+  let Position_Permetation1,Position_Permetation2
+  Position_Permetation1=Math.floor(randomNum(0, size-1))
+  Position_Permetation2=Math.floor(randomNum(0, size-1))
+  while(Position_Permetation2==Position_Permetation1)Position_Permetation2=Math.floor(randomNum(0, size-1))
+  let C
+  C=SolutionC[Position_Permetation1]
+  SolutionC[Position_Permetation1]=SolutionC[Position_Permetation2]
+  SolutionC[Position_Permetation2]=C
+  
+
+  
+}
+  </script>
+</body>
+</html>  

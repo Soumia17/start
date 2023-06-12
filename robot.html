@@ -1,194 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      body{
+      body {
         min-height: 90vh;
         background-color: #666;
         text-align: center;
         align-items: center;
         justify-content: center;
         display: flex;
+        flex-direction: column;
+        /* cbow fskir */
       }
-      .border{
-        position: absolute;
-        border: 2px solid #a89f9f;
-        height: 510px;
-        width: 505px;
-        display: flex;
-        flex-wrap: wrap;
-
+      button {
+        padding: 10px 25px;
+        background: #07e6d3;
+        border: none;
+        border-radius: 10px;
       }
-      .chemin{
-            
-            border: 2px solid #cac3c3;
-            height: 80px;
-            width: 80px;
-            padding-bottom: 0px;
-           
-        }
-      #my-canvas{
-        z-index: 1;
-        
-      }  
-       
     </style>
-</head>
-
-<body>
-  <canvas id="my-canvas" width="510" height="505" ></canvas>
-  <div  class="border" >
- 
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-    <div class="chemin"></div>
-  
-  </div>
-    <script>
-        
-        function drawPoint(context, x, y, label, color, size) {
-      	if (color == null) {
-        	color = '#000';
-        }
-        if (size == null) {
-            size = 5;
-        }
-      
-      	var radius = 0.5 * size;
-
-      	// to increase smoothing for numbers with decimal part
-		var pointX = Math.round(x - radius);
-        var pointY = Math.round(y - radius);
-  
-        context.beginPath();
-        context.fillStyle = color;
-      	context.fillRect(pointX, pointY, size, size);
-        context.fill();
-      
-      	if (label) {
-            var textX = Math.round(x);
-          	var textY = Math.round(pointY - 5);
-          
-            context.font = 'Italic 14px Arial';
-            context.fillStyle = color;
-            context.textAlign = 'center';
-            context.fillText(label, textX, textY);
-        }
-    }
-    var canvas = document.querySelector('#my-canvas');
-    var context = canvas.getContext('2d');
-    
-        // drawPoint(context, 420, 420, 'Start', 'red', 14);
-
-  
-        //function de  chemin
-
-        function creat_CHemin(){
-         let X_position=[420,340,250,164,80]
-         let Y_position=[84,170,255,335,420]
-         let token_X=[]
-         let token_Y=[]
-         let start_X=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-         let start_Y=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-         token_X.push(start_X)
-         token_Y.push(start_Y)
-        //  start index
-        drawPoint(context, X_position[start_X], Y_position[start_Y], 'Start', 'red', 14);
-
-        //goals index
-        let goals_X=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-        let goals_Y=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-        while(goals_X==start_X && goals_Y==start_Y){
-          goals_X=Math.floor(Math.random() * (4 - 0 + 1)) + 0 
-          goals_Y=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-        }
-        token_X.push(goals_X)
-         token_Y.push(goals_Y)
-        drawPoint(context, X_position[goals_X], Y_position[goals_Y], 'goals', 'Green', 14);
-
-         //danger index
-         let chek=false
-        let danger_X=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-        let danger_Y=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-        for(let i=0;i<5;i++){
-          while(chek==false){
-          chek=true
-           danger_X=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-           danger_Y=Math.floor(Math.random() * (4 - 0 + 1)) + 0
-          for(let j=0;j<token_X.length;j++){
-            if(danger_X==token_X[j]&&danger_Y==token_Y[j])
-              chek=false
-          }}
-          chek=false
-          token_X.push(danger_X)
-          token_Y.push(danger_Y)
-          drawPoint(context, X_position[danger_X], Y_position[danger_Y], '👹', 'purple', 14);
-
-        }
-
-        // way index
-        chek==false
-   
-        for(let i=0;i<X_position.length;i++){
-          for(let j=0;j<X_position.length;j++){
-          
-          chek=true
-           
-          for(let t=0;t<token_X.length;t++){ 
-            if(X_position[i]==X_position[token_X[t]]&&Y_position[j]==Y_position[token_Y[t]])
-              chek=false
-              console.log(X_position[i])
-              console.log(token_X[t])
-          }
-          
-          token_X.push(X_position[i])
-          token_Y.push(Y_position[j])
-          if(chek==true)
-          drawPoint(context, X_position[i], Y_position[j], '', 'black', 14);
-
-        }
-        }}
-
-       
-
-        creat_CHemin()
-    </script>
-</body>
+  </head>
+  <body>
+    <canvas id="my-canvas" width="510" height="505"></canvas>
+    <button id="solve">Solve</button>
+    <script src="./script.js"></script>
+  </body>
 </html>

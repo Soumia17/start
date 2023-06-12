@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width:200vh;
+           height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content{
+            
+            height: 600px;
+            width: 100%;
+            /* display: flex;
+            justify-content: center;
+            
+            /* text-align: center; */
+            margin-top: 10%;
+            margin-left: -105%;
+             
+            
+        }
+        .items{
+            padding: 10px;
+        }
+        .my-canvas { 
+            border: 1px solid gray;
+            /* margin-left: -100%; */
+            
+        }
+
+        
+      </style>
+</head>
+<body>
+    <div class="content">
+        <div class="items">
+        <label for="">give number of vile</label>
+        <input type="number" name="" id="number"> 
+        <button class="btn">Solve</button>
+        </div>
+        <!-- <canvas id="my-canvas" width="500" height="500"></canvas> -->
+        
+        <canvas class="my-canvas" id="canvas1" width="400" height="400"> </canvas>
+
+	<canvas class="my-canvas" id="canvas2" width="400" height="400" ></canvas>
+	<canvas class="my-canvas" id="canvas3" width="400" height="400"></canvas>
+	<canvas class="my-canvas" id="canvas4" width="400" height="400"></canvas>
+	<canvas class="my-canvas" id="canvas5" width="400" height="400"></canvas>
+  <canvas class="my-canvas" id="canvas6" width="400" height="400"></canvas>
+
+    </div>
+  <script>
+
+
+          let TakenPoint=[]
+          // let TakenPoint_Y=[]
+          // crat copie of array
+          let newArray
+          let shoisway=[]
+          
+// Usage example:
+    // var canvas = document.querySelector('#my-canvas');
+    // var context = canvas.getContext('2d');
+    // Get the canvas elements
+const canvas1 = document.getElementById('canvas1');
+const canvas2 = document.getElementById('canvas2');
+const canvas3 = document.getElementById('canvas3');
+const canvas4 = document.getElementById('canvas4');
+const canvas5 = document.getElementById('canvas5');
+const canvas6 = document.getElementById('canvas6');
+
+// Get the canvas contexts
+const ctx1 = canvas1.getContext('2d');
+ctx1.font = "18px Arial";
+ctx1.fillText("Gluten", 10, 50);
+const ctx2 = canvas2.getContext('2d');
+ctx2.font = "18px Arial";
+ctx2.fillText("Gluten GO!=Back", 10, 50);
+const ctx3 = canvas3.getContext('2d');
+ctx3.font = "18px Arial";
+ctx3.fillText("Gluten_with_min_way", 10, 50);
+const ctx4 = canvas4.getContext('2d');
+ctx4.font = "18px Arial";
+ctx4.fillText("RS", 10, 50);
+const ctx5 = canvas5.getContext('2d');
+ctx5.font = "18px Arial";
+ctx5.fillText("Taboue", 10, 50);
+const ctx6 = canvas6.getContext('2d');
+ctx6.font = "18px Arial";
+ctx6.fillText("AG", 10, 50);
+
+
+  //  function rendom
+    function randomNum(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min; // You can remove the Math.floor if you don't want it to be an integer
+}
+// function to chose randome position of vile
+    function RandomPoint(){
+      X=randomNum(30, 350)
+      Y=randomNum(30, 350)
+      var targetPoint = {x: X, y: Y}
+        while(TakenPoint.some(p => p.x === targetPoint.x && p.y === targetPoint.y)){
+          X=randomNum(30, 350)
+          Y=randomNum(30, 350)
+          targetPoint = {x: X, y: Y}
+        }
+      return  { x: X, y: Y }
+    }
+
+    // function to draw the points of vile 
+    function drawPoint(context, x, y, label, color, size) {
+      	if (color == null) {
+        	color = '#000';
+        }
+        if (size == null) {
+            size = 5;
+        }
+      
+      	var radius = 0.5 * size;
+
+      	// to increase smoothing for numbers with decimal part
+		    var pointX = Math.round(x - radius);
+        var pointY = Math.round(y - radius);
+  
+        context.beginPath();
+        context.fillStyle = color;
+      	context.fillRect(pointX, pointY, size, size);
+        context.fill();
+      
+      	if (label) {
+            var textX = Math.round(x);
+          	var textY = Math.round(pointY - 5);
+          
+            context.font = 'Italic 14px Arial';
+            context.fillStyle = color;
+            context.textAlign = 'center';
+            context.fillText(label, textX, textY);
+        }
+    }
+    let number
+ 
+document.querySelector('.btn').addEventListener('click',()=>{
+  number = document.getElementById('number').value
+
+    let point 
+    var letter = 'A'
+  for(let i=0; i<number;i++){
+    point =RandomPoint()
+    // drawPoint(context, point.x, point.y, letter, 'blue', 7)
+    drawPoint(ctx1, point.x, point.y, letter, 'blue', 5)
+    drawPoint(ctx2, point.x, point.y, letter, 'blue', 5)
+    drawPoint(ctx3, point.x, point.y, letter, 'blue', 5)
+    drawPoint(ctx4, point.x, point.y, letter, 'blue', 5)
+    drawPoint(ctx5, point.x, point.y, letter, 'blue', 5)
+    drawPoint(ctx6, point.x, point.y, letter, 'blue', 5)
+
+    shoisway.push('A')
+    letter=String.fromCharCode(letter.charCodeAt(0) + 1)
+    TakenPoint.push({x: point.x, y: point.y})
+    point=0
+    
+     }
+     newArray = TakenPoint.slice(0)
+    Gluten()
+    
+    Gluten_with_min_way()
+    RS(10,1,0.25,3)
+    tabau(10,3)
+    
+    solve_tsp_with_ga(TakenPoint, population_size=100, num_generations=1000)
+     Gluten_with_Distance_Go_NotEqal_Back()
+})
+// function to draw line between viles
+function drawLine(context,begien=0,i){
+
+      // Set line color
+      context.strokeStyle = 'black';
+
+      // Set line width
+      context.lineWidth = 2;
+
+      // Begin drawing the line
+      context.beginPath();
+
+      // Move the pen to the first point
+      console.log(begien)
+      context.moveTo(TakenPoint[begien].x, TakenPoint[begien].y);
+
+      // Draw a line to the second point
+      
+      context.lineTo(TakenPoint[i].x, TakenPoint[i].y);
+
+      // End drawing the line
+      context.stroke();
+
+}
+// function to calculate the distance
+function distance(x1, y1, x2, y2) {
+  var dx = x2 - x1;
+  var dy = y2 - y1;
+  var dist = Math.sqrt(dx*dx + dy*dy);
+  return dist;
+}
+// function to calculate the mindistance
+function minDistance() {
+  var minDist = Number.POSITIVE_INFINITY;
+  let index
+  for (var i = 1; i < TakenPoint.length; i++) {
+    var dist = distance(TakenPoint[0].x, TakenPoint[0].y, TakenPoint[i].x, TakenPoint[i].y)
+    if (dist < minDist) {
+      minDist = dist;
+      index=i
+    }
+  }
+  return index;
+}
+function Gluten(){
+  let position
+  var point
+  var index
+ 
+  
+    while(TakenPoint.length!=1){
+      position= minDistance()
+      
+      drawLine(ctx1,0,position)
+      point={x:TakenPoint[position].x,y:TakenPoint[position].y}
+      // remove the first element of the array
+      TakenPoint.shift();
+      // put the newindex in the first position
+      index = TakenPoint.findIndex(p => p.x === point.x && p.y === point.y); // get the new index of the point after removing the first value
+
+      if (index !== -1) { // if the point is in the array
+        TakenPoint.splice(index, 1); // remove the point from its current position
+        TakenPoint.unshift(point); // add the point to the first index of the array
+      }else console.log('indifend index')
+    }
+    
+    drawLine(ctx1,0,0)
+    // let TakenPoint
+    TakenPoint.length=0
+    TakenPoint = newArray.slice()
+    const index_end = TakenPoint.indexOf(TakenPoint[position])
+    drawLine(ctx1,0,index_end)
+}
+// calculate all distance and put theme in matrix
+      function MatrixDistance(){
+        let matrix = [];
+      for (let i = 0; i < TakenPoint.length; i++) {
+        let row = [];
+        for (let j = 0; j < TakenPoint.length; j++) {
+          row.push(distance(TakenPoint[0].x, TakenPoint[0].y, TakenPoint[i].x, TakenPoint[i].y));
+        }
+        matrix.push(row);
+      }
+      return matrix
+      }
+      // get the min and the max to change the value around thos values
+      function getMinMax(matrix) {
+  let min = Infinity;
+  let max = -Infinity;
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] < min) {
+        min = matrix[i][j];
+      }
+      if (matrix[i][j] > max) {
+        max = matrix[i][j];
+      }
+    }
+  }
+  return {min, max};
+}
+ function chnangMatrixValue(matrix){
+  let {min, max} = getMinMax(matrix);
+  let value 
+  for(let i=1;i<matrix.length;i++){
+    value =randomNum(min, max)
+    for(let j=0;j<i;j++){
+      matrix[i][j]=value
+    }
+    
+  }
+  return matrix
+ }
+
+
+function Gluten_with_Distance_Go_NotEqal_Back(){
+let matrix =chnangMatrixValue(MatrixDistance())
+  //found the min value between go and back
+  // let minDistnc
+  let newDistance=[{dis1:0,dis2:0}]
+  for(let i=1;i<matrix.length;i++){   
+    for(let j=0;j<i;j++){
+      
+      newDistance.push({dis1:matrix[i][j],dis2:matrix[j][i]})
+    }
+    
+  }
+
+  // found the new way
+  var minDist=-Infinity
+  let minChek
+  let newDistance_Copy = newDistance.slice();
+  let position
+  var index,index2
+  let point,point2
+  while(newDistance.length!=1){
+    position=1
+  for (var i = 1; i < newDistance.length; i++) {
+    minChek=Math.min(Math.abs(newDistance[0].dis1-newDistance[i].dis1),
+                      Math.abs(newDistance[0].dis1-newDistance[i].dis2),
+                      Math.abs(newDistance[0].dis2-newDistance[i].dis1),
+                      Math.abs(newDistance[0].dis2-newDistance[i].dis2))
+    if (minChek < minDist) {
+      minDist = minChek
+      position=i
+    }
+  }
+  drawLine(ctx2,0,position)
+  point={x:TakenPoint[position].x,y:TakenPoint[position].y}
+  point2={dis1:newDistance[position].dis1,dis2:newDistance[position].dis2}
+
+    // remove the first element of the array
+    TakenPoint.shift()
+    newDistance.shift()
+      // put the newindex in the first position
+      index = TakenPoint.findIndex(p => p.x === point.x && p.y === point.y); // get the new index of the point after removing the first value
+      index2 = newDistance.findIndex(t => t.dis1 === point2.dis1 && t.dis2 === point2.dis2); // get the new index of the point after removing the first value
+
+      if (index !== -1 && index2 !== -1) { // if the point is in the array
+        TakenPoint.splice(index, 1); // remove the point from its current position
+        TakenPoint.unshift(point); // add the point to the first index of the array
+        newDistance.splice(index2, 1); 
+        newDistance.unshift(point2);
+      }else console.log('indifend index')
+  }
+
+  TakenPoint.length=0
+  TakenPoint = newArray.slice()
+  const index_end = TakenPoint.indexOf(TakenPoint[position])
+    drawLine(ctx1,0,index_end)
+}
+
+function distance_of_theWay(arr){
+  let dis=0
+  for(let i=0;i<arr.length-1;i++){
+    
+     dis+=distance(arr[i].x, arr[i].y, arr[i+1].x, arr[i+1].y)
+  }
+  return dis
+}
+function Gluten_with_min_way(){
+  TakenPoint.length=0
+  TakenPoint = newArray.slice();
+  
+  let dis=distance_of_theWay(TakenPoint)
+  let minDis=dis
+  let newWay=[]
+  let C
+  for(let i=0;i<TakenPoint.length;i++)
+        newWay[i]=i
+  for(let i=1;i<TakenPoint.length-1;i++){   
+    for(let j=1;j<TakenPoint.length-i;j++){
+      C=TakenPoint[j]
+      TakenPoint[j]=TakenPoint[j+1]
+      TakenPoint[j+1]=C
+      dis=distance_of_theWay(TakenPoint)
+      if(dis<minDis){
+        minDis=dis
+        C=newWay[j]
+        newWay[j]=newWay[j+1]
+        newWay[j+1]=C
+
+      }
+    }
+    
+
+  }
+    TakenPoint.length=0
+    TakenPoint = newArray.slice()
+    console.log(newArray)
+  for(let i=0;i<newWay.length-1;i++){
+    drawLine(ctx3,newWay[i],newWay[i+1])
+  }
+  console.log('way',newWay[newWay.length-1])
+  drawLine(ctx3,newWay[newWay.length-1],newWay[0])
+  TakenPoint.length=0
+    TakenPoint = newArray.slice()
+}
+
+
+//Recuit Semulaire
+function proba(SolutionCorrent,TInitial,SolutionPris){
+    return randomNum(0, 1)<Math.exp((-1)*Math.abs(SolutionPris-SolutionCorrent)/TInitial)
+}
+function RS(Tf,Ti,Alfa,NbVoisin){
+  let S0=distance_of_theWay(TakenPoint)
+  let SC
+  let size=TakenPoint.length
+  let Position_Permetation1,Position_Permetation2
+  let voisin=1
+  let C
+  while(Tf>Ti){
+  while(voisin<=NbVoisin){
+    Position_Permetation1=Math.floor(randomNum(1, size-1))
+    Position_Permetation2=Math.floor(randomNum(1, size-1))
+         while(Position_Permetation2==Position_Permetation1)Position_Permetation2=Math.floor(randomNum(0, size-1))    
+    C=TakenPoint[Position_Permetation1]
+    TakenPoint[Position_Permetation1]=TakenPoint[Position_Permetation2]
+    TakenPoint[Position_Permetation2]=C
+    SC=distance_of_theWay(TakenPoint)
+    if(SC<S0 || proba(SC,Tf,S0)){
+      voisin++
+      S0=SC
+    }else{
+      C=TakenPoint[Position_Permetation1]
+    TakenPoint[Position_Permetation1]=TakenPoint[Position_Permetation2]
+    TakenPoint[Position_Permetation2]=C
+    }  
+  }
+  Tf=Tf*Alfa
+}
+  console.log(TakenPoint.length)
+for(let i=0;i<TakenPoint.length-1;i++){
+    drawLine(ctx4,i,i+1)
+  }
+  drawLine(ctx4,0,TakenPoint.length-1)
+  TakenPoint.length=0
+    TakenPoint = newArray.slice();
+}
+
+// function
+// Function tabau
+function tabau(NB_iteration,NB_voisin){
+  let Taboue_Array=[]
+  let Matrix_Voisin=[]
+  let best_way=distance_of_theWay(TakenPoint)
+  let NewDis
+  let index_besVoisin
+  let iteration=0
+  while(iteration<NB_iteration){
+  for(let i=0;i<NB_voisin;i++){
+    TakenPoint = shuffleArray(TakenPoint)
+    Matrix_Voisin.push(shuffleArray(TakenPoint))
+    NewDis=distance_of_theWay(TakenPoint)
+    if(NewDis<best_way)
+      best_way=NewDis
+      index_besVoisin=i
+  }
+  TakenPoint= Matrix_Voisin[index_besVoisin].slice()
+  iteration++
+}
+for(let i=0;i<TakenPoint.length-1;i++){
+  drawLine(ctx5,i,i+1)
+}
+drawLine(ctx5,0,TakenPoint.length-1)
+// ctx5.font = "18px Arial";
+// ctx5.fillText(TakenPoint, 90, 50);
+TakenPoint.length=0
+    TakenPoint = newArray.slice()
+
+}
+
+
+//  ficntion generat aleatoir 
+// function shuffleArray(array) {
+//   // Loop through the array from the end to the beginning
+//   for (let i = array.length - 1; i > 0; i--) {
+//     // Generate a random index from 0 to i
+//     let j = Math.floor((Math.random() * i)+1);
+
+//     // Swap the elements at indices i and j
+//     [array[i], array[j]] = [array[j], array[i]];
+//   }
+
+//   return array;
+// }
+function shuffleArray(array){
+// slice the array to exclude the first element
+const [firstPoint, ...restOfPoints] = array;
+
+// permute the remaining elements
+restOfPoints.sort(() => Math.random() - 0.5);
+
+// concatenate the first element back to the permuted array
+const permutedPoints = [firstPoint, ...restOfPoints];
+ return permutedPoints
+}
+// Solution generat
+function lineExistsInMatrix(m, line) {
+  for (let i = 0; i < m.length; i++) {
+    if (m[i].toString() === line.toString()) {
+      return true;
+    }
+  }
+  return false;
+}
+// function best chois
+// function getFourMinValues(arr,D) {
+//   const minValues = [];
+// const valueToIndex = {};
+// for (let i = 0; i < arr.length; i++) {
+//   const value = arr[i];
+//   if (minValues.length < D || value < Math.max(...minValues)) {
+//     minValues.push(value);
+//     valueToIndex[value] = i;
+//   }
+// }
+// minValues.sort((a, b) => a - b);
+// const minIndices = minValues.map(value => valueToIndex[value]);
+//  return minIndices
+// }
+function getNMinIndices(arr, n) {
+  const indices = Array.from(arr.keys());
+  indices.sort((a, b) => arr[a] - arr[b]);
+  return indices.slice(0, n).map(i => [i, arr[i]]);
+}
+
+// permitaion
+function permuteArrays(array1, start1, end1, array2, start2, end2) {
+  const newArray1 = array1.slice(start1, end1).concat(array2.slice(start2, end2));
+  const newArray2 = array2.slice(0, start2).concat(array1.slice(start1, end1), array2.slice(end2));
+
+  // Assign the permuted values back to the input arrays
+  for (let i = start1; i < end1; i++) {
+    array1[i] = newArray1[i - start1];
+  }
+  for (let i = start2; i < end2; i++) {
+    array2[i] = newArray2[i - start2];
+  }
+}
+
+function getIndexOfFirstRepeatedValue(array) {
+  for (let i = 0; i < array.length; i++) {
+    for (let j = i + 1; j < array.length; j++) {
+      if (array[i] === array[j]) {
+        return i;
+      }
+    }
+  }
+  return -1; // No repeated values found
+}
+
+
+// function AG
+
+
+function solve_tsp_with_ga(points, population_size=100, num_generations=1000) {
+  const dist_fn = (p1, p2) => Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2);
+  const mutate = (individual) => {
+    if (individual.length < 2) {
+      return individual;
+    }
+    const [i, j] = getRandomSample(2, Array.from({length: individual.length}, (_, i) => i));
+    [individual[i], individual[j]] = [individual[j], individual[i]];
+  }
+  const cost = (path) => {
+    let distance = 0;
+    for (let i = 0; i < path.length - 1; i++) {
+      distance += dist_fn(points[path[i]], points[path[i+1]]);
+    }
+    distance += dist_fn(points[path[path.length-1]], points[path[0]]);
+    return distance;
+  }
+  const crossover = (parent1, parent2) => {
+    const subset_size = getRandomInt(1, parent1.length);
+    const subset = getRandomSample(subset_size, Array.from({length: parent1.length}, (_, i) => i)).sort();
+    const child = Array(parent1.length).fill(-1);
+    for (let i of subset) {
+      child[i] = parent1[i];
+    }
+    let j = 0;
+    for (let i = 0; i < parent2.length; i++) {
+      if (!child.includes(parent2[i])) {
+        while (child[j] != -1) {
+          j++;
+        }
+        child[j] = parent2[i];
+      }
+    }
+    return child;
+  }
+  const select_survivors = (population, population_size) => {
+    return population.sort((a, b) => cost(a) - cost(b)).slice(0, population_size);
+  }
+  const getRandomSample = (k, arr) => {
+    const shuffled = arr.slice();
+    let n = shuffled.length;
+    while (n > 1) {
+      const i = Math.floor(Math.random() * n);
+      n--;
+      [shuffled[i], shuffled[n]] = [shuffled[n], shuffled[i]];
+    }
+    return shuffled.slice(0, k);
+  }
+  const getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  let population = Array.from({length: population_size}, () => ['0', ...Array.from({length: points.length - 1}, (_, i) => (i + 1).toString())].sort(() => Math.random() - 0.5));
+  for (let i = 0; i < num_generations; i++) {
+    let children = [];
+    for (let j = 0; j < population_size / 2; j++) {
+      const [parent1, parent2] = getRandomSample(2, population);
+      const child1 = crossover(parent1, parent2);
+      const child2 = crossover(parent2, parent1);
+      mutate(child1);
+      mutate(child2);
+      children.push(child1);
+      children.push(child2);
+    }
+    population = select_survivors([...population, ...children], population_size);
+  }
+
+  const best_individual = population.reduce((best, current) => cost(current) < cost(best) ? current : best);
+  TakenPoint = best_individual.map(index => points[index])
+  let back_To_begien
+  for(let i=0;i<TakenPoint.length-1;i++){
+      drawLine(ctx6,i,i+1)
+      back_To_begien=i
+    }
+     drawLine(ctx6,TakenPoint.length-1,0)
+    TakenPoint.length=0
+    TakenPoint = newArray.slice()
+}
+
+  </script>
+</body>
+</html>
